@@ -63,10 +63,9 @@ for ii=1:length(fileSplit);
 end 
 %should add check for this maybe?
 %% Fill in assumptions to initialize function
-    if nargin < 2, QC = true; end 
-    if nargin < 3, freq = 1000;  end
-    if nargin < 4, server = 'yb-crburge'; end
-    if nargin < 5, rig = 'medusa'; end
+    if nargin < 2, freq = 1000;  end
+    if nargin < 3, server = 'yb-crburge'; end
+    if nargin < 4, rig = 'medusa'; end
     
     %% Change channel inputs below based on your rig/reconfig dates of nidaq
 if strcmpi(rig, 'medusa') && date>=200425
@@ -107,7 +106,7 @@ elseif strcmpi(rig, 'medusa')&& date<=191205
 end 
 
 %% reference sbx info 
-     try  info=readSbxInfo(ipath, infpath, date);
+     try  info=readSbxInfo(infpath, ipath); %removed passing date, parses from filename
         catch
         sprintf('Problem opening sbx info file for %s %s %s, sbx file inaccessible, corrupted, or missing. nidaq=0', mouse, date, run) %6f
         success = 0;

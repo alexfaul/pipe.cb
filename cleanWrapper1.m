@@ -16,7 +16,7 @@ end                                         %% skip this if TIFFs already exist/
 
 %% Read in Nidaq + Save as _nidaq.mat
 for ii=1:length(sbxDirs) %will output a _nidaq.mat file
-[nidaq,success] = readSbxEphys(sbxDirs{ii});
+[nidaq,success] = readSbxEphys(sbxDirs{ii}); %this took kinda awhile to run... hmm
 goodfiles(ii)   = success;
 end
 

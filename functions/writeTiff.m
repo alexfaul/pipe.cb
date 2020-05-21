@@ -1,4 +1,4 @@
-function success = writeTiff(array, filename, typestr, ijroot)
+function success = writeTiff(array, tifPath, typestr, ijroot)
 %WRITETIFF Writes array as TIFF file
 % % orig: write_tiff
 %   Uses ImageJ code to do write
@@ -16,17 +16,17 @@ function success = writeTiff(array, filename, typestr, ijroot)
 
     if ~strcmp(class(array), typestr), array = cast(array, typestr); end
 
-    imp = arrayToImagej(array, typestr, ijroot);
     
-    [pathstr] = fileparts(filename);
+    [pathstr] = fileparts(tifPath);
     if ~isempty(pathstr) && exist(pathstr) ~= 7, mkdir(pathstr); end
-    if isempty(strfind(filename, '.tif')), filename = [filename '.tif']; end
-
+    if isempty(strfind(tifPath, '.tif')), tifPath = [tifPath '.tif']; end
+    [~,stackName]=fileparts(tifPath);
+    imp = arrayToImagej(array, typestr, ijroot, stackName); %check tifPath
     fs = ij.io.FileSaver(imp);
     if imp.getImageStackSize == 1
-        success = fs.saveAsTiff(filename);
+        success = fs.saveAsTiff(tifPath);
     else
-        success = fs.saveAsTiffStack(filename);
+        success = fs.saveAsTiffStack(tifPath);
     end    
     
     if ~success
