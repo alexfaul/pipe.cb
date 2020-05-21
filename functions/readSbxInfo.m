@@ -1,12 +1,32 @@
-function info = readSbxInfo(ipath, infpath, date) 
+function info = readSbxInfo(infpath,ipath) 
 % ipath = path to .mat file
 % infpath = path to .sbx file - need this for the additional parameters
 % info should be outputting. Both as character strings
-%% Load the .mat info file
-load(ipath);
+% AF 05/2020
 
+%%% based on read_sbxinfo from Arthur Sugden
+%% Construct .mat info file - assumes stored in same folder 
+[tempPath,file,~]=fileparts(infpath);
+base = [tempPath '\' file];
+
+if nargin<2 && contains(infpath, '.sbx')==1 %if only given the sbx path, create .mat info path
+    ipath = [base '.mat'];
+end
+
+%% Need date to automatically interpret scanbox info correctly - extracting from filename
+parsedFile=strsplit(file,'_')                                          %split filename by '_' & find the date by uniq characteristics 
+for ii=1:length(parsedFile)                             
+ [number,status]=str2num(parsedFile{ii})                               % (length - run is 3numeric, mousename usually 3-4alphanumeric + ONLY containing numbers) 
+    if  status==1 && length(parsedFile{ii})>4 ;                        % if scanbox changes so that length of runs are longer than 4, or if you don't input expexted date format this will error
+         date=str2num(parsedFile{ii})
+     end
+end
+clear number status parsedFile
+%% load .mat info 
+load(ipath);
+%% Setting info parameters 
 if(isfield(info,'sz'))
-      sz = [796 512]; %this might be backwards... but i really think the height is 512 and width is 796
+      sz = [796 512];                           %is this backwards?... height is 512 and width is 796??
 end
  
 if ~isfield(info, 'nchan') && date>=191108
@@ -22,18 +42,6 @@ if info.nchan == 2;
 elseif info.nchan == 1;
     factor = 2;
 end 
-
-% switch info.nchan
-%     case 1
-%           info.nchan = 2;      % both PMT0 & 1
-%           factor = 1;
-%     case 2
-%           info.nchan = 1;      % PMT 0
-%           factor = 2;
-% %     case 3
-% %          info.nchan = 1;      % PMT 1
-% %          factor = 2;
-% end
  %% Adding info read in from the .sbx files (frames)
     info.fid = fopen(infpath);
     d = dir(infpath);
@@ -49,9 +57,8 @@ end
             info.nsamples = (info.sz(2)*info.recordsPerBuffer*2*info.nchan);   % bytes per record 
     else
             info.max_idx =  d.bytes/info.bytesPerBuffer*factor - 1;
-    end
-        
-% Appended useful information
+    end      
+%% Append useful information
     info.nframes = info.max_idx + 1;
     info.optotune_used = false;
     info.otlevels = 1;
@@ -64,7 +71,6 @@ end
         elseif info.scanmode == 1 && date>=191108, info.framerate = 15.63; end
         
     info.height = info.sz(2);
-    info.width = info.recordsPerBuffer;
-        
+    info.width = info.recordsPerBuffer;    
 end        
  

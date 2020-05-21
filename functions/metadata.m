@@ -1,4 +1,4 @@
-function info = metadata(path, mtype_or_date, run, server, alternate_mtype)
+function info = metadata(path, run, server, alternate_mtype)
 % READ: read metadata for movie files. As of now can handle SBX.
 
     use_mdr = false;
@@ -26,7 +26,7 @@ function info = metadata(path, mtype_or_date, run, server, alternate_mtype)
     % Find file type
 %     [~, ~, ext] = fileparts(path); % commented 3/12/19
 %     if strcmpi(mtype, 'sbx') || (length(ext) > 3 && strcmpi(ext(1:4), '.sbx'))
-        info = read_sbxinfo(path);
+        info = readSbxInfo(path);
 %     else
 %         error('Cannot read metadata for movie type.');
 %     end

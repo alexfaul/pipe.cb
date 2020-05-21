@@ -35,7 +35,7 @@ function tiffLoop(path, n, pmt, customStart, varargin)
     if nargin < 3, pmt = 1; end 
     if nargin < 4, customStart = []; end 
 
-    info = metadata(path);
+    info = readSbxInfo(path);
  %% Create vector of image index to write tiffs in succession
     %%This whole loop assumes that if you're inputting custom frames and associated n, 
     % you're not going to have more frames to write than length of movie
@@ -59,7 +59,7 @@ function tiffLoop(path, n, pmt, customStart, varargin)
  %% writing Tiffs
         for i=1:length(tiff_start_vector);
         spath = sprintf('%s_-%i.tif', path(1:strfind(path,'.')-1), i);
-        tempTiff = pipe.imread(path, tiff_start_vector(i), n, pmt, p.optolevel);
+        tempTiff = imRead(path, tiff_start_vector(i), n, pmt, p.optolevel);
         writeTiff(tempTiff, spath, class(tempTiff));
         end    
 end

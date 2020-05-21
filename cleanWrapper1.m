@@ -4,7 +4,7 @@
 % files to run in second line of indexing after findFilePathAF
 %% Find Files of Interest
 %root='E:\2Photon\Data'
-root    ='Z:\DATA TEMP\New folder';            %% as character 
+root    ='Z:\DATA_TEMP\New folder';            %% as character 
 ext ='.sbx';                                   %% Can find any character (text) matching ext. Also faster than the File Explorer
 sbxdirs = findFILE(root,ext);                  %% Will return cell array of all files under root containing extList
 
