@@ -5,13 +5,13 @@
 %% Find Files of Interest
 %root='E:\2Photon\Data'
 root    ='Z:\DATA TEMP\New folder';            %% as character 
-ext ='.sbx';                                %% as long as in character format, can find any text matching this. Most useful for extensions for pipelinin'. Faster than the File Explorer search also (suck it Windows)
-sbxdirs = findFILE(root,ext);         %% Will return cell array of all files under root containing extList
+ext ='.sbx';                                   %% Can find any character (text) matching ext. Also faster than the File Explorer
+sbxdirs = findFILE(root,ext);                  %% Will return cell array of all files under root containing extList
 
 sbxDirs = sbxdirs(1);                      %% Sub-select files you want to continue in pipeline with by indexing 
 %% Write TIFFs - OPTIONAL! CAN RUN .Sbx DIRECTLY IN SUITE2P on YB-2
 for ii=1:length(sbxDirs);
-tiffloopAF(sbxDirs{ii},1000,0);   %% write TIFFs for all sbx files found above to run suite2p
+tiffLoop(sbxDirs{ii},1000,0);   %% write TIFFs for all sbx files found above to run suite2p
 end                                         %% skip this if TIFFs already exist/don't need TIFFs
 
 %% Read in Nidaq + Save as _nidaq.mat
