@@ -1,7 +1,7 @@
 %% Get BHV paths to find stimuli/response onsets/offsets
 root='Z:\DATA TEMP\New folder';
 ext = 'bhv2';
-bhvdirs = findFilePathAF(root,ext);
+bhvdirs = findFILE(root,ext);
 bhvPath = bhvdirs(1);
 %% Path to file with conditions listed
 
@@ -11,7 +11,7 @@ end                                                                     % config
 % configfile=fullfile(which([cname,'.txt']));
 %% find stim times from nidaq output pulses
 ext = 'dsNidaq';
-nidaqdirs = findFilePathAF(root,ext);
+nidaqdirs = findFILE(root,ext);
 nidaqDirs=nidaqdirs(:);
 for ii=1:length(nidaqDirs);
 Stim=stimTimes(nidaqDirs{ii});
@@ -19,7 +19,7 @@ end
 %% make generate cell plots and generate behavior plots 2 separate functions
  %Run
 ext = '_stim';
-stimdirs = findFilePathAF(root,ext);
+stimdirs = findFILE(root,ext);
 stimDirs=stimdirs(3);
 time_window=90;
 for ii=1:length(stimDirs)
