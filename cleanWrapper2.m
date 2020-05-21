@@ -1,12 +1,19 @@
+%% Wrapper 2
+
+% Before running, make sure you have:
+%   1. bhv2 file from the ML computer AND
+%   2. Outputs from Facemap/DLC (pupil and motSVD)
+% If using FM, convert outputs with jupyter notebook 
+%   (Open anaconda prompt, type jupyter notebook, adjust filepath in facemap processing, run - comment out pupil if only doing motSVD)
 %% Get BHV paths to find stimuli/response onsets/offsets
-root='Z:\DATA TEMP\New folder';
+root='Z:\DATA_TEMP\New folder';
 ext = 'bhv2';
 bhvdirs = findFILE(root,ext);
 bhvPath = bhvdirs(1);
 %% Path to file with conditions listed
 
 for ii=1:length(bhvPath);   
-    bhv_struct= bhv2Convert(bhvPath{ii});                               %% MAKE SURE THERE IS A RUN # in THE .bhv2 FILE NAME (A 001 or 002 etc) IN THERE
+    [~]= bhv2Convert(bhvPath{ii});                               %% MAKE SURE THERE IS A RUN # in THE .bhv2 FILE NAME (A 001 or 002 etc) IN THERE
 end                                                                     % config file (.txt with MonkeyLogic Conditions) should be in the 2p data folder
 % configfile=fullfile(which([cname,'.txt']));
 %% find stim times from nidaq output pulses
