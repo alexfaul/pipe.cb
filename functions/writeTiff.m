@@ -1,4 +1,4 @@
-function success = writeTiff(array, filename, typestr)
+function success = writeTiff(array, filename, typestr, ijroot)
 %WRITETIFF Writes array as TIFF file
 % % orig: write_tiff
 %   Uses ImageJ code to do write
@@ -6,17 +6,17 @@ function success = writeTiff(array, filename, typestr)
 %
 %   array should be size [nRows,nCols,nFrames,nPlanes] where nPlanes is 1
 %   (indexed color) or 3 (RGB color)
-%
-%   See also: readtiff
-%
-%$Id: writetiff.m 305 2008-07-18 20:55:10Z vincent $
 %   Edited 180731 by Arthur Sugden
+%% Change this default (do not push this change to git) or pass your correct path as 4th input
+%% 
 
     % Correct the image type
     if nargin < 3, typestr = class(array); end
+    if nargin < 4, ijroot= 'E:\2Photon\pipe-master\minimal_ImageJ'; end
+
     if ~strcmp(class(array), typestr), array = cast(array, typestr); end
 
-    imp = arrayToImagej(array, typestr);
+    imp = arrayToImagej(array, typestr, ijroot);
     
     [pathstr] = fileparts(filename);
     if ~isempty(pathstr) && exist(pathstr) ~= 7, mkdir(pathstr); end

@@ -1,18 +1,16 @@
-function imp = arrayToImagej(array, typestr, name)
+function imp = arrayToImagej(array, typestr, ijroot,name)
     %IJARRAY2PLUS Converts MATLAB array to ImageJ ImagePlus object
     %   imp = ijarray2plus(array, typestr)
     %   array size [nRows,nCols,nFrames,nPlanes]
-    % $Id: ijarray2plus.m 475 2009-03-20 20:43:13Z kenichi $
-    % Edited by Arthur Sugden 180731
-
-    % Name is name for array in imagej
-    
-    if nargin < 3, name = 'stack'; end
-    arraytype = class(array);
+    % Edited Arthur Sugden 180731
+    % Edited A faulkner 20/05/20
     if nargin < 2 || isempty(typestr), typestr = class(array); end  
-    
-    pipe.lab.runimagej();
-    
+    if nargin < 3, disp('please pass/correct imageJ path in tiffLoop');
+    ijroot= 'E:\2Photon\pipe-master\minimal_ImageJ'; end %this is default for YB, will have to change for other setups
+    if nargin < 4, name = 'stack'; end %oh we can improve this!! Parse file name to actually name tiffs
+     
+    arraytype = class(array);
+    runImageJ(ijroot); 
     [height, width, nframes, nplanes] = size(array);
 
     %% Handle different bit depths and RGB images

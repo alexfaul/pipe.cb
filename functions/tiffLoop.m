@@ -1,4 +1,6 @@
-function tiffLoop(path, n, pmt, customStart, varargin)
+function tiffLoop(path, n, pmt, customStart,ijroot,varargin)
+%% put path to YOUR imagej here
+if nargin<5, ijroot= 'E:\2Photon\pipe-master\minimal_ImageJ'; end 
 %% I/O
 % path is full path to sbx file you want to write tif's for (ex: Z:\AFdata\2p2019\W03\200220_W04\W04_200220_001.sbx)
     % This should always be correct if using the find file function above it in
@@ -60,6 +62,6 @@ function tiffLoop(path, n, pmt, customStart, varargin)
         for i=1:length(tiff_start_vector);
         spath = sprintf('%s_-%i.tif', path(1:strfind(path,'.')-1), i);
         tempTiff = imRead(path, tiff_start_vector(i), n, pmt, p.optolevel);
-        writeTiff(tempTiff, spath, class(tempTiff));
+        writeTiff(tempTiff, spath, class(tempTiff), ijroot);
         end    
 end
