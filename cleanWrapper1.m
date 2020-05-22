@@ -30,6 +30,6 @@ end
     eyeDirs= eyedirs(16:end);
 
 for ii=1:length(eyeDirs)
-[temp]=writeVidAF(eyeDirs{ii}); % change this so that it will find the eye.mat files from the sbx directories
+[temp]=writeVid(eyeDirs{ii}); % change this so that it will find the eye.mat files from the sbx directories
 goodEyeFile(ii)=temp;
 end 
