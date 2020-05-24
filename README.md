@@ -1,16 +1,28 @@
 # pipe.cb
-Two-photon + Behavioral Integration - Burgess Lab
+## Two-photon + Behavioral Integration - Burgess Lab
 
-pipe.cb has 3 wrappers. The end of a wrapper indicates a break point in the pipe where manual input is required (Cell clicking, pupil detection, etc).
+#### pipe.cb has 3 wrappers. Manual input is required after each wrapper:
+1. wrapper1: write Tiffs, read+align nidaq, write eye video (.avi) -> Facemap/DLC + jupyter notebook to convert (raise issue)
+2. wrapper2: stimuli + behavior -> run Suite2p
+3. wrapper3: process neural data from Suite2p, integrate some behavior
+Begin Spyder analysis
 
-The pipeline is based on inputting entire paths to functions. This avoids common parsing issues and allows easy portability between machines/servers.
+
+The pipeline is based on inputting entire paths to functions. 
+This avoids common parsing issues, doesn't force folder renames, maintains accurate filePaths, and allows easy portability between machines/servers.
+
 findFILE is integral to running pipe.cb
 
-The only changes to run pipe.cb are selecting (indexing) the files to analyze in the wrappers
+The only user steps to run pipe.cb are 
+1. clone this repo
+2. clone facemap + Suite2p
+3. selecting (indexing) into findFILE to select files for analysis (wrapper1-3) 
+4. adjusting paths [ijroot (tiffLoop), and bhv file template in bhv2Convert]
 
-# In the works - Shell to run through constituively 
 
-# Alexa Faulkner 2020
+#### In the works - Shell to run through constitutively 
 
+ Alexa Faulkner 2020
 
-Thank you to Arthur Sugden for his essential guidance, and Rohan Ramesh for allowing us to use his old code (there's gotta be a better way to say this)
+### HUGE THANK YOU TO:
+Carsen Stringer, Marius Pachitariu, Arthur Sugden, Rohan Ramesh for essential guidance, and providing essential code and tools!
