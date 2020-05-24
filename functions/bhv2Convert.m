@@ -138,7 +138,7 @@ end
 parsedConditions = regexprep(parsedConditions, '#', '_');
 bhv_struct.FullConditions=parsedConditions(2:end,:)
 
-taskObject=(bhv_struct.FullConditions(:,6:end));
+taskObject=(bhv_struct.FullConditions(:,5:end));
 bhv_struct.TaskObject=taskObject;
 %% save as struct
 filepath=fileparts(dataFile);

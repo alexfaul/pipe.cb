@@ -26,9 +26,9 @@ end
 %% plots of behavior (pupil, running, etc) during trials w/ stim
     ext = '_stim';
     stimdirs = findFILE(root,ext);
-    stimDirs=stimdirs(3);
+    stimDirs=stimdirs(1);
     time_window=90;
 
-for ii=1:length(stimDirs)
-   behaviorPlots2(stimDirs{ii},time_window,'FC Day 3 - Expression')           % last is custom label (useful for labeling behavioral day ex: FC) 
+for ii=1:length(stimDirs) %should this go back to looking for dsnidaq? If there is no stim... skip behavior plots?
+   behaviorPlots(stimDirs{ii},time_window,'FC Day 3 - Expression')           % last is custom label (useful for labeling behavioral day ex: FC) 
 end 
