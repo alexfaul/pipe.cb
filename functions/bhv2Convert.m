@@ -26,7 +26,7 @@ fidbhv = fopen(dataFile, 'r');
     end
 %% get filepath and load in .bhv2
 dataFile=char(dataFile);
-[filepath,bhv2Filename,ext]=fileparts(dataFile)
+[filepath,bhv2Filename,ext]=fileparts(dataFile);
 
 [data, MLConfig, TrialRecord, ~] = mlconcatenate(dataFile);                  %not returning fieldname, duplicate of datafile
 bhv2_struct=mlread(dataFile); 

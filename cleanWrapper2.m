@@ -16,12 +16,12 @@ for ii=1:length(bhvPath);
 end                                                              % config file (.txt with MonkeyLogic Conditions) should be in the 2p data folder
 % configfile=fullfile(which([cname,'.txt']));
 %% find stim times from nidaq output pulses
-    ext = 'dsNidaq';
-    nidaqdirs = findFILE(root,ext);
-    nidaqDirs=nidaqdirs(:);
+    ext = 'bhv.mat';
+    bhvdirs = findFILE(root,ext);
+    bhvPath=bhvdirs(1);
 
-for ii=1:length(nidaqDirs);
-   Stim=stimTimes(nidaqDirs{ii});
+for ii=1:length(bhvPath);
+   Stim=stimTimes(bhvPath{ii});
 end 
 %% plots of behavior (pupil, running, etc) during trials w/ stim
     ext = '_stim';
