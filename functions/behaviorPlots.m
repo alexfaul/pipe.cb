@@ -1,10 +1,11 @@
 function behaviorPlots(path,timeWin,altTitle)
 %% I/O 
-% path is full path of _stim (can also use sbx) file
+% path is full path of _stim (can also use .sbx) file
 % timeWin is integer of seconds to isolate before and after stim
 % altTitle='FC app Day 1';
 
-
+% Outputs new folder with graphs generated here
+%% Allow for alternate title in graphs (optional)
 if nargin<3, altTitle=[]; end 
 %% creating directory and additional extensions for necessary files
 
@@ -66,7 +67,7 @@ if isfile(motSVDPath);
     elseif ~isfile(motSVDPath);
     sprintf('No motionSVD from Facemap detected')
 end
-Beh.EMG=dsNidaq.EMG;
+Beh.EMG=dsNidaq.EMG;                                                        %shit, what do we do about EMG?
 if isfield(dsNidaq, 'runVel');
     Beh.runVel=dsNidaq.runVel;
 end
@@ -107,11 +108,11 @@ end
 %% inputting behavioral responses to Visstim into structure
 for bb=1:length(behIdx)                                                     % loop through behaviors
     for k=1:length(oriIdx)                                                  % loop through all oris
-    idxt=trialIdx.(oriIdx{k});                                                   % do all trials for a particular ori (trial # varies)
+    idxt=trialIdx.(oriIdx{k});                                              % do all trials for a particular ori (trial # varies)
     for ii=1:length(idxt)                                                   
-        if (Stim.visstimOnsets(idxt(ii))+timeWin+stimLength)<length(Beh.EMG) 
-        if (Stim.visstimOnsets(idxt(ii))-timeWin>0)
-            responseVis.(oriIdx{k}).(behIdx{bb})(ii,:) = ...              % grab correct onset times corresponding to the trial
+        if (Stim.visstimOnsets(idxt(ii))+timeWin+stimLength)<length(Beh.EMG) % To adjust for end trials not having full length of stim Window
+        if (Stim.visstimOnsets(idxt(ii))-timeWin>0)                          % to adjust for beginning trials not having enough before time for Stim Window
+            responseVis.(oriIdx{k}).(behIdx{bb})(ii,:) = ...                 % grab correct onset times corresponding to the trial
             Beh.(behIdx{bb})(Stim.visstimOnsets(idxt(ii))-timeWin:Stim.visstimOnsets(idxt(ii))+stimLength+timeWin);
         end 
         end 
@@ -142,8 +143,8 @@ imagesc(responseVis.(oriIdx{kk}).(behIdx{jj}))
 temp=(oriIdx{kk});
 xlabel(temp, 'Interpreter', 'none');
 hold on
-plot([timeWin timeWin],ylim);
-plot([timeWin+stimLength timeWin+stimLength],ylim);
+plot([timeWin timeWin],ylim,'Color','g');
+plot([timeWin+stimLength timeWin+stimLength],ylim,'Color','g');
 ylabel('Trials');
 hold off
 caxis manual
@@ -154,18 +155,17 @@ end
 sgtitle([figTitle,(behIdx{jj}),' oriHeatmap','- Trial Response by Ori'])
 saveas(gcf,(figName))
 end
-%% Making structure with behavioral responses to shock
+%% Making structure with behavioral responses to shock + associated heatmap
 if ~isempty(Stim.shockOnsets)==1
     for bb=1:length(behIdx)
     for ii=1:length(Stim.shockOnsets);
-        if (Stim.shockOnsets(ii)+timeWin)<length(motsvd)
+        if (Stim.shockOnsets(ii)+timeWin)<length(dsNidaq.visstim)           %any signal length that will be consistently present will do here.
         responseShock.(behIdx{bb})(ii,:)=...
         Beh.(behIdx{bb})(Stim.shockOnsets(ii)-timeWin:Stim.shockOnsets(ii)+timeWin);
         end
     end     
     end
 end
-
 
 if ~isempty(Stim.shockOnsets)==1
 figure
@@ -178,29 +178,31 @@ xlabel(temp);
 ylabel('Trials');
 sgtitle([figTitle,' Behavioral Response after Shock'])
 hold on
-plot([timeWin timeWin],ylim)
-plot([timeWin+2 timeWin+2],ylim)
+plot([timeWin timeWin],ylim,'Color','g')
+plot([timeWin+2 timeWin+2],ylim,'Color','g')
 colorbar
 end
 figName=[ft,'',' SHOCK','_behHeatmap','.jpeg']
 saveas(gcf,(figName))
-end  
-%% 
-% 
-% figure
-% subplot(1,3,1)
-% histogram(dsNidaq.runVel)
-% title('Running Velocity Distribution')
-% subplot(1,3,2)
-% histogram(Beh.motsvd)
-% title('Motion SVD Distribution') %maybe try just motion entropy here
-% subplot(1,3,3)
-% histogram(Beh.parea)
-% title('Pupil Area Distribution')
 
-%%
-
-%% Shaded Error Bars
+%%%% ShErrBar for shock
+for mm=1:length(behIdx) %loop through all behaviors to be plotted
+figure
+subplot(length(oriIdx),1,mm)
+shadedErrorBar(timeVec,...
+    responseShock.(behIdx{mm}),{@mean,@(x) std(x)/sqrt(size(x,1))});
+temp=behIdx{kk};
+xlabel(temp,'Interpreter', 'none')
+hold on
+plot([timeWin timeWin],ylim); %
+plot([timeWin+stimLength timeWin+stimLength],ylim);
+hold off
+sgtitle([upper([behIdx{mm}]),' ',figTitle, ' shErrBar(sem) - Shock Behavior Response']);
+figName=[ft,'','_shErrBarShock','.jpeg']
+saveas(gcf,(figName))
+end
+end 
+%% Shaded Error Bars - behaviors by ori and behavior after shock
 timeVec=0:(timeWin+stimLength+timeWin); %make time vector
 
 for mm=1:length(behIdx) %loop through all behaviors to be plotted
@@ -220,5 +222,6 @@ end
 figName=[ft,'',(behIdx{mm}),'_shErrBar','.jpeg']
 saveas(gcf,(figName))
 end
+
 
 end 

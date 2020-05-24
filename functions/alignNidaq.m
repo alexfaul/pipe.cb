@@ -6,7 +6,7 @@ if nargin < 2, graph=1; end
 %% creating paths to load
 if contains(path,'.sbx')==1;            % Account for different potential inputs 
     root=extractBefore(path, '.sbx');   % So this can accept either paths without extension, with .sbx or _nidaq.mat at end
-    nidaqPath = [root '_nidaq.mat'] 
+    nidaqPath = [root '_nidaq.mat'] ;
 elseif contains(path,'_nidaq.mat')==1;
      nidaqPath=path;
 elseif contains(path,'_nidaq.mat')==0 && contains(path,'.sbx')==0;
@@ -89,6 +89,9 @@ dsnidaq.shock=nidaq.shock(C);
 dsnidaq.ensure=nidaq.ensure(C);
 dsnidaq.quinine=nidaq.quinine(C);
 dsnidaq.frames2p=nidaq.frames2p(C);
+dsnidaq.EMG=nidaq.EMG(C);
+
+dsnidaq.EEG=nidaq.EEG; %not downsampling EEG here. Will downsample according to specific needs
 dsnidaq.Fs=nidaq.Fs;
 dsnidaq.rig=nidaq.rig;
 dsnidaq.framerate=nidaq.framerate;
