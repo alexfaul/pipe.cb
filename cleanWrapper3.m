@@ -16,7 +16,7 @@ dffCalc(stimDirs{ii},percentile,time_window);
 end 
 %% Generate plots
     ext = 'dff.mat';
-    stimdir = findFilePathAF(root,ext);
+    stimdir = findFILE(root,ext);
     stimDirs=stimdir(:);
 
 for ii=1:length(stimDirs)
