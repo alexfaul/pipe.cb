@@ -49,12 +49,12 @@ for ii=1:length(ori)
     if length(temp)==2;                                                 % blanks only have 1 underscore. this is prone to breaking.... may want to address
         oris{ii}='999';
     else 
-        oris{ii}=temp{2};                                               % again, assumes same naming structure, falls apart w diff naming structure... rexep before???
+        oris{ii}=temp{2};                                               % again, assumes same naming structure, falls apart w diff naming structure... regexp before???
     end
 end
 
 test=(regexp(oris,'\d*','Match'));
-characterOri=cellfun(@str2double,test,'UniformOutput',0); % change this dummy
+characterOri=cellfun(@str2double,test,'UniformOutput',0); % change this
 %orientations=unique(Stim.condition);
 
 for ii=1:length(Stim.condition)
@@ -65,7 +65,4 @@ Stim.orientationsUsed=unique((Stim.oriTrace));
 %% Saving struct
 Filename=[filepath,'\',dsnidaq.mouse,'_',num2str(dsnidaq.date),'_', num2str(dsnidaq.run),'_','stim']
 save(Filename, '-struct', 'Stim');
-%% BHV=[]
-%     sprintf('BHV.mat file not written - will treat as spontaneous run') 
-%     sprintf('If not spontaneous, either RUN # absent/mismatch between nidaq and BHV, other issue with BHV
 end 

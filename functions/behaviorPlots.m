@@ -127,7 +127,14 @@ else
     ft=[folder,'\',Stim.mouse,'_',num2str(Stim.date),'_', num2str(dsNidaq.run)]
     figTitle=[dsNidaq.mouse,' ',num2str(dsNidaq.date),' ', num2str(dsNidaq.run),' ',]
 end 
+%% Great Idea:
+% make graphing function that allows you to specify levels so you can look at graphs any number of ways
+% would save so much re-coding.
 
+% e.g. (behIdx,ori) would give oris nested w/in behaviors. (ori,behIdx) would give you behavior nested w/in oris
+% Wouldn't be too difficult... 
+% would massively improve below b/c it is clunky. Thoroughly debugged but
+% clunky.
 %% Making heatmaps for all present behaviors
 for ii=1:length(behIdx)
     errBottom.(behIdx{ii})=prctile(Beh.(behIdx{ii}),5); %generating the error bars (bottom)
@@ -152,7 +159,7 @@ caxis([errBottom.(behIdx{jj}) errTop.(behIdx{jj})]);
 colorbar
 figName=[ft,'',(behIdx{jj}),'_oriHeatmap','.jpeg'];
 end 
-sgtitle([figTitle,(behIdx{jj}),' oriHeatmap','- Trial Response by Ori'])
+sgtitle([figTitle,(behIdx{jj}),' oriHeatmap','- Trial Response by Ori']);
 saveas(gcf,(figName))
 end
 %% Making structure with behavioral responses to shock + associated heatmap
@@ -198,7 +205,7 @@ plot([timeWin timeWin],ylim); %
 plot([timeWin+stimLength timeWin+stimLength],ylim);
 hold off
 sgtitle([upper([behIdx{mm}]),' ',figTitle, ' shErrBar(sem) - Shock Behavior Response']);
-figName=[ft,'','_shErrBarShock','.jpeg']
+figName=[ft,'','_shErrBarShock','.jpeg'];
 saveas(gcf,(figName))
 end
 end 
@@ -219,7 +226,7 @@ plot([timeWin+stimLength timeWin+stimLength],ylim);
 hold off
 sgtitle([upper([behIdx{mm}]),' ',figTitle, ' shErrBar(sem) - Behavior Response by Ori']);
 end
-figName=[ft,'',(behIdx{mm}),'_shErrBar','.jpeg']
+figName=[ft,'',(behIdx{mm}),'_shErrBar','.jpeg'];
 saveas(gcf,(figName))
 end
 
