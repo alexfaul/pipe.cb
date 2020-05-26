@@ -49,14 +49,14 @@ fileSplit=strsplit(filename,'_');
 for ii=1:length(fileSplit);
     temp=fileSplit{ii};
     [num, status] = str2num(temp);
-    if status==1 
+    if status==1 ;
         if num>999
           date=str2num(temp);
         else
             run=temp;
         end 
     elseif contains(temp,'run')==1;
-        run=temp
+        run=temp;
     elseif status==0 && contains(temp,'run')==0; 
         mouse=temp;
     end 

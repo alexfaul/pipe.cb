@@ -59,10 +59,9 @@ end
 C = find(diff(nidaq.frames2p)==3);
 %% Check for presence of 2p pulses and if does not exist, substitute in another run
 while length(C)<nidaq.nframes               %  while should keep this looping until finds a suitable 2p frames substitution
-nframes=num2str(nidaq.nframes);
-dlgtitle = [nframes ' pulses found ' 'Number of 2p pulses ~= # frames']
+dlgtitle = ['Number of 2p pulses does not match number of frames']
 dims = [1 80];
-prompt = {'Please name of nidaq file (e.g. W05_200415_001) to substitute 2p pulses'}; % entered as plain text (no quotation marks etc, its string in cell as default)
+prompt = {'Please name of nidaq file (e.g. W05_200415_001) to substitute 2p pulses,'}; % entered as plain text (no quotation marks etc, its string in cell as default)
 answer = inputdlg(prompt,dlgtitle,dims); 
 
 if contains(answer{1},'_nidaq.mat')==0;
