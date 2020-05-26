@@ -69,7 +69,7 @@ if contains(answer{1},'_nidaq.mat')==0;
 elseif contains(answer{1},'_nidaq.mat')==1;
     ext = answer{1};
 end
-backupPath = findFilePathAF(dataDirectory,ext);
+backupPath = findfiLE(dataDirectory,ext);
 backupNidaq=load(backupPath{1});
 
  C = find(diff(backupNidaq.frames2p)==3);                                %% Make sure you're frames2p here is fully BINARIZED!!
