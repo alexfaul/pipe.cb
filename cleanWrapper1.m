@@ -28,6 +28,8 @@ for ii=1:length(sbxDirs); %will output a _dsnidaq.mat file
 end
 %% Eye vids - find and write them to .avi
     root   = 'Z:\AFdata\2p2019\W05'
+    eyedirs = findFILE(root,ext);
+    eyeDirs = eyedirs()
     
 for ii=1:length(eyeDirs)
 [temp]=writeVid(eyeDirs{ii}); % change this so that it will find the eye.mat files from the sbx directories
