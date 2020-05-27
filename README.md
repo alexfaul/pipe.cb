@@ -19,8 +19,12 @@ The only user steps to run pipe.cb are
 3. selecting (indexing) into findFILE to select files for analysis (wrapper1-3) 
 4. adjusting paths {ijroot (tiffLoop), and bhv file template in bhv2Convert}
 
-## To Access Data:
+### To Access Data:
 [Turbo Instructions](/docs/TurboAccess.md) 
+
+### To Access Remote desktop (yottabyte):
+Must have an account with ARC
+[Yottabyte instructions] (/docs/yottabyteAccess.md)
 
 #### In the works - Shell to run through constitutively 
 
