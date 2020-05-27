@@ -9,7 +9,7 @@ networks/vpn/getting-started
 6. In upper left menu bar, Computer-&gt;Map Network Drive
 7. Drive is Z: (you can change this to whatever letter speaks to you if you want to shake things up. H, S, &amp; T
 drives already exist with your UHMS account)
-8. Folder is \\umms-crburge.turbo.storage.umich.edu\umms-crburge
+8. Folder is \\\umms-crburge.turbo.storage.umich.edu\umms-crburge
 9. CHECK ‘connect using different credentials’ box. If shared computer, UNCHECK ‘reconnect at sign-in’.
 10. Enter UMROOT\uniqname and level 1 if prompted (Domain should be UHMS). Click OK and you should be
 in.
