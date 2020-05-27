@@ -24,6 +24,7 @@ The only user steps to run pipe.cb are
 
 ### To Access Remote desktop (yottabyte):
 Must have an account with ARC
+
 [Yottabyte instructions] (/docs/yottabyteAccess.md)
 
 #### In the works - Shell to run through constitutively 
