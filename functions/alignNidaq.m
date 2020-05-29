@@ -73,8 +73,9 @@ end
 backupPath = findFILE(dataDirectory,ext);
 backupNidaq=load(backupPath{1});
 
- C = find(diff(backupNidaq.frames2p)==3);                                %% Make sure you're frames2p here is fully BINARIZED!!
-if length(C)<nidaq.nframes 
+C = find(diff(backupNidaq.frames2p)==3);                                %% Make sure you're frames2p here is fully BINARIZED!!
+nidaq.frames2p=backupNidaq.frames2p;
+ if length(C)<nidaq.nframes 
     continue
 end
 end
