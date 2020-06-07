@@ -38,6 +38,12 @@ if nargin<5, ijroot= 'E:\2Photon\pipe-master\minimal_ImageJ'; end
     if nargin < 4, customStart = []; end 
 
     info = readSbxInfo(path);
+    %% make new directory
+    [fullRoot,~,~] = fileparts(path);
+folder                = [fullRoot,'\','unregisteredTIFFs']; % create directory if it doesn't exist
+if ~exist(folder, 'dir');
+        mkdir(folder);
+end
  %% Create vector of image index to write tiffs in succession
     %%This whole loop assumes that if you're inputting custom frames and associated n, 
     % you're not going to have more frames to write than length of movie
@@ -60,7 +66,7 @@ if nargin<5, ijroot= 'E:\2Photon\pipe-master\minimal_ImageJ'; end
         
  %% writing Tiffs
         for i=1:length(tiff_start_vector);
-        spath = sprintf('%s_-%i.tif', path(1:strfind(path,'.')-1), i);
+        spath = sprintf('%s_-%i.tif', fullRoot(1:strfind(fullRoot,'.')-1), i); %changed to new fullRoot here
         tempTiff = imRead(path, tiff_start_vector(i), n, pmt, p.optolevel);
         writeTiff(tempTiff, spath, class(tempTiff), ijroot);
         end    
