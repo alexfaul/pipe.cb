@@ -1,6 +1,8 @@
 function tiffLoop(path, n, pmt, customStart,ijroot,varargin)
 %% put path to YOUR imagej here
 if nargin<5, ijroot= 'E:\2Photon\pipe-master\minimal_ImageJ'; end 
+%should add mkdir optional. Will always make a folder named
+%'unregisteredTIFFs' where .sbx file is found and put all Tiffs in that folder
 %% I/O
 % path is full path to sbx file you want to write tif's for (ex: Z:\AFdata\2p2019\W03\200220_W04\W04_200220_001.sbx)
     % This should always be correct if using the find file function above it in
@@ -39,8 +41,8 @@ if nargin<5, ijroot= 'E:\2Photon\pipe-master\minimal_ImageJ'; end
 
     info = readSbxInfo(path);
     %% make new directory
-    [fullRoot,~,~] = fileparts(path);
-folder                = [fullRoot,'\','unregisteredTIFFs']; % create directory if it doesn't exist
+    [fullRoot,fileName,~] = fileparts(path);
+folder                = [fullRoot,'\','unregisteredTIFFs\']; % create directory if it doesn't exist
 if ~exist(folder, 'dir');
         mkdir(folder);
 end
@@ -63,10 +65,10 @@ end
     if ((tiff_start_vector(end)+(n-1))<info.nframes)
         disp('Pick # of frames to write that is a factor of full movie length, e.g. n=1000 in 25000 frames')
     end 
-        
+
  %% writing Tiffs
         for i=1:length(tiff_start_vector);
-        spath = sprintf('%s_-%i.tif', fullRoot(1:strfind(fullRoot,'.')-1), i); %changed to new fullRoot here
+        spath = [folder sprintf('%s_-%i.tif',fileName, i)]; %changed to new fullRoot here
         tempTiff = imRead(path, tiff_start_vector(i), n, pmt, p.optolevel);
         writeTiff(tempTiff, spath, class(tempTiff), ijroot);
         end    

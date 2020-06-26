@@ -97,7 +97,9 @@ dsnidaq.EEG=nidaq.EEG; %not downsampling EEG here. Will downsample according to 
 dsnidaq.Fs=nidaq.Fs;
 dsnidaq.rig=nidaq.rig;
 dsnidaq.framerate=nidaq.framerate;
-dsnidaq.eyeframerate=nidaq.eyeframerate;
+if isfield(nidaq, 'eyeframerate')
+    dsnidaq.eyeframerate=nidaq.eyeframerate;
+end 
 dsnidaq.mouse=nidaq.mouse;
 dsnidaq.date=nidaq.date;
 dsnidaq.run=nidaq.run;

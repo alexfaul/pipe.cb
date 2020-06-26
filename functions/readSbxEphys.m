@@ -15,6 +15,7 @@ if contains(path,'.sbx')==1;
     root=extractBefore(path, '.sbx');
 else contains(path,'.sbx')==0;
     root=path;
+    path=[path '.sbx'];
 end 
 
 infpath   =  path  ;                  % add extension of native scanbox outputs
