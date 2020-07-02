@@ -4,7 +4,7 @@
 % files to run in second line of indexing after findFilePathAF
 %% Find Files of Interest
 %root='E:\2Photon\Data'
-    root    ='Z:\AFdata\2p2019\W05';                    %% as character 
+    root    ='Z:\AFdata\2p2019\W03';                    %% as character 
     ext ='.sbx';                                   %% Can find any character (text) matching ext. Also faster than the File Explorer
     sbxdirs = findFILE(root,ext);                  %% Will return cell array of all files under root containing extList
     sbxDirs = sbxdirs(12:13);                      %% Sub-select files you want to continue in pipeline with by indexing 
