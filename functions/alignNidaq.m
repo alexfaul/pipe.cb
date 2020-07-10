@@ -72,13 +72,23 @@ elseif contains(answer{1},'_nidaq.mat')==1;
 end
 backupPath = findFILE(dataDirectory,ext);
 backupNidaq=load(backupPath{1});
-
+%check length - can vary even in same frame # runs
+if length(backupNidaq.frames2p)~=length(nidaq.EMG)
+    if length(backupNidaq.frames2p)>length(nidaq.EMG)
+        backupNidaq.frames2p=backupNidaq.frames2p(1:length(nidaq.EMG));
+    if length(backupNidaq.frames2p)<length(nidaq.EMG)
+       sprintf('substitute nidaq too short')
+       continue
+    end
+    end
+end
 C = find(diff(backupNidaq.frames2p)==3);                                %% Make sure you're frames2p here is fully BINARIZED!!
 nidaq.frames2p=backupNidaq.frames2p;
- if length(C)<nidaq.nframes 
+  if length(C)<nidaq.nframes && length(nidaq.frames2p)~=length(nidaq.EMG) %% can be any field here, just want same length vectors imported in to sub 
     continue
+  end
 end
-end
+
 %% Adjust for diff idx effect and cut off if pulses exceed nframes (extra pulses at end - very rare)
 C=C+1;                                      % adjusts to be index of actual pulse instead of shifted by 1 bc of diff 
 C=C(1:nidaq.nframes);
