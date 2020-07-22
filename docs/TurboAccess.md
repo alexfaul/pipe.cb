@@ -1,7 +1,6 @@
 Turbo Setup
 
-1. Download appropriate UM Cisco VPN for your OS and UM role: https://its.umich.edu/enterprise/wifi-
-networks/vpn/getting-started
+1. Download appropriate UM Cisco VPN for your OS and UM role: https://its.umich.edu/enterprise/wifi-networks/vpn/getting-started
 2. Open downloaded .exe file to install (will need admin permissions) and follow prompts.
 3. Open Cisco and connect to UM VPN – All Traffic (should be default)
 4. Login with uniqname and LEVEL 1 password when prompted.
