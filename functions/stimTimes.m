@@ -1,13 +1,35 @@
-function Stim=stimTimes(bhvPath)
+function Stim=stimTimes(bhvPath, dsNidaqPath)
 %% Parse input path
 [filepath,filename,~]=fileparts(char(bhvPath));
 BHV=load(bhvPath);
-
+if nargin==2, dsnidaq=load(dsNidaqPath); end 
 %% Load the converted BHV file based on extension and same run #
-try dsnidaq=load([filepath,'\',...
-    ls(fullfile(filepath, ['*','dsNidaq.mat*']))]);                         %This is better way to do it than assuming same naming structure.. if it comes up!
+if nargin<2
+
+fileSplit=strsplit(extractBefore(filename,'_bhv'),'_');
+for ii=1:length(fileSplit);
+    temp=fileSplit{ii};
+    [num, status] = str2num(temp);
+    if status==1 ;
+        if num>999
+          date=str2num(temp);
+        else
+            run=temp;
+        end 
+    elseif contains(temp,'run')==1;
+        run=temp;
+    elseif status==0
+        if length(regexp(temp,'[A-Z]','match'))==1;   %%this will break will anything with FC or App in title of bhv file... eekk
+        mouse=temp;
+        end 
+    end 
+end 
+    
+try  dsnidaq= load([filepath '\' mouse '_' num2str(date) '_' run '_dsNidaq.mat'])      
 catch
     sprintf('dsNidaq.mat not written/in different folder than BHV file!')
+    return
+end
 end
 %% Find onsets and offsets
 Stim.mouse=dsnidaq.mouse;
@@ -58,7 +80,7 @@ characterOri=cellfun(@str2double,test,'UniformOutput',0); % change this
 %orientations=unique(Stim.condition);
 
 for ii=1:length(Stim.condition)
-Stim.oriTrace(ii)=characterOri{Stim.condition(ii)};
+Stim.oriTrace(ii) = characterOri{Stim.condition(ii)};
 end
 Stim.orientationsUsed=unique((Stim.oriTrace));
 % Stim.stimTable=stimTable;

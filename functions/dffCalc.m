@@ -9,14 +9,19 @@ suite2pData = load(char(root)); % make it so the path is by the clicked cells
 [fullRoot,filename,~] = fileparts(root);
 idcs   = strfind(fullRoot,filesep);
 newdir = fullRoot(1:idcs(end-2)-1);                                            % expects Fall.mat to be 3 folders up. This WILL break w diff file arrangement
-                                                                               % should figure out how to make more robust w/out strict naming scheme (or auto generate names)
+    
+    % should figure out how to make more robust w/out strict naming scheme (or auto generate names)
 ext     = '_dsNidaq.mat';
 nidaqDirs = findFILE(newdir,ext);
-if isempty(nidaqDirs)
-    sprintf('dsNidaq file not in expected location. Please move to folder above unregisteredTIFFs')
-    return
+
+if isempty(nidaqDirs) %if previous directory is empty, go up one level
+    nidaqDirs = findFILE(fullRoot(1:idcs(end-3)-1),ext);                                            % expects Fall.mat to be 3 folders up. This WILL break w diff file arrangement
 end
-dsnidaq = load(char(nidaqDirs{1}));
+if isempty(nidaqDirs)
+    sprintf('dsNidaq file not in expected location. Proceeding, but will abort if cant concatenate. Please move to folder above unregisteredTIFFs')
+   elseif ~isempty(nidaqDirs)
+    dsnidaq = load(char(nidaqDirs{1}));
+end
 %% find number of frames in the run
 nFrames=length(dsnidaq.frames2p);
 
@@ -24,22 +29,22 @@ nFrames=length(dsnidaq.frames2p);
 % Clunky but reliable
 if length(suite2pData.F)~=nFrames                                                   % If the length of traces doesn't equal the total # of frames in nidaq
     if isempty(runNums)                                                             % and user hasn't inputted custom runs to concat together... then,
-    runConcat(nidaqDirs,fullRoot); 
-    runNums=sort(runsConcatenate);                                          % dialog box to enter runs to cat together if not specified when called
-    else
-    runNums=arrayfun(@(x) sprintf('%03d', mod(x,100)), runNums, 'UniformOutput', false);  
+    runConcat2(nidaqDirs,root,dffTreatment); %should be full path with Fall.mat extension
+    runDirs=sort(runsConcatenate);                                          % dialog box to enter runs to cat together if not specified when called
+%     else
+%     runNums=arrayfun(@(x) sprintf('%03d', mod(x,100)), runNums, 'UniformOutput', false);  
     end
    
   % Find full path of ALL dsNidaq files in the directory                                               
-  ext='_dsNidaq.mat';
-  rundirs=findFILE(newdir,ext);   
-  runDirs=rundirs(find(contains(rundirs,runNums)));   % isolate nidaq files matching the runs manually specified
-    
-  if length(runNums)~=length(runDirs)
-        sprintf('Cannot find nidaq files for all runs associated with Fall.mat file')
-        return
-  end
-  
+%   ext='_dsNidaq.mat';
+%   rundirs=findFILE(newdir,ext);   
+%   runDirs=rundirs(find(contains(rundirs,runNums)));   % isolate nidaq files matching the runs manually specified
+%     
+%   if length(runNums)~=length(runDirs)
+%         sprintf('Cannot find nidaq files for all runs associated with Fall.mat file')
+%         return
+%   end
+%   
    for ii=1:length(runDirs)
         [~,fname,~]=fileparts(runDirs{ii});                                     % runDirs has 
         dsNidaq.(fname)=load(runDirs{ii});                                      % load each nidaqfile that matches user-input runs in a loop
@@ -51,23 +56,29 @@ if length(suite2pData.F)~=nFrames                                               
 
    for ii=1:length(fields);
         concatenateddata.(fields{ii})=[];        % create empty structure to append all nidaq data to for desired runs
-   end
-
+   end   
+ %%%%%%%%%%%%%%%%%%%%  
+   %Isolate a run, loop through all fields, 
+   %skip the fields with duplicates (date, mousename etc) 
+   %UNLESS it's shock or frames 2p 
+   %(since processing can make arrays the same if no shock etc)
    for ii=1:length(runIdx)
         for kk = 1:length(fields);
         fname = fields{kk};
-            if isequal(dsNidaq.(runIdx{ii}).(fname),concatenateddata.(fname))~=1 | strcmp(fname,'frames2p')==1 ; %if the info is the same, then skip. If it contains different info, then proceed with concatenation
-            concatenateddata.(fname) = ...
+              if  isequal(dsNidaq.(runIdx{ii}).(fname),concatenateddata.(fname))~=1 | strcmp(fname,'frames2p')==1 | strcmp(fname,'shock');                                   %if the info is the same, then skip. If it contains different info, then proceed with concatenation
+            concatenateddata.(fname) = ...                                  
             horzcat(concatenateddata.(fname),dsNidaq.(runIdx{ii}).(fname));
-            end 
+              end 
         end
    end
-   % adjusting timestamps
+   
+   % adjusting timestamps - must have timestamps in column form for this to
+   % work
    for ii=2:length(runDirs) 
       concatenateddata.timeStamps2p(:,ii)=concatenateddata.timeStamps2p(:,ii)+...
       (concatenateddata.timeStamps2p(end,ii-1));
    end
-    % replace
+    % replace corrected timestamps
     concatenateddata.timeStamps2p=...
     reshape(concatenateddata.timeStamps2p,[1,sum(nFrames)]);
     dsnidaq=concatenateddata; 

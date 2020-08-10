@@ -4,11 +4,11 @@
 % analysis
 % Must have output from Suite2p to run all below functions
 %% %% get dFF calculations - RUN AFTER SUITE2P + CELL CLICKING!
-    root='Z:\DATA_TEMP\New folder';
+    root    ='Z:\AFdata\2p2019\Sut3';                    %% as character 
     ext = 'Fall.mat';
     stimdir = findFILE(root,ext);
 
-    stimDirs=stimdir(2);
+    stimDirs=stimdir(:);
     time_window=30;
     percentile=10;
 for ii=1:length(stimDirs)
