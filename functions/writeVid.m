@@ -58,6 +58,7 @@ try writeVideo(v,data)
     catch
     success=0;
     sprintf('Unspecified issue writing video, check if file is corrupted')
+    close (v)
     return
 end;
 close(v);
