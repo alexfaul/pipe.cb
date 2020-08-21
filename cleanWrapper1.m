@@ -4,10 +4,10 @@
 % files to run in second line of indexing after findFilePathAF
 %% Find Files of Interest
 %root='E:\2Photon\Data'
-    root    ='Z:\AFdata\2p2019\Sut3';                    %% as character 
+    root    ='Z:\AFdata\2p2019\W10';                    %% as character 
     ext ='.sbx';                                   %% Can find any character (text) matching ext. Also faster than the File Explorer
     sbxdirs = findFILE(root,ext);                  %% Will return cell array of all files under root containing extList
-    sbxDirs = sbxdirs(113:end);                      %% Sub-select files you want to continue in pipeline with by indexing 
+    sbxDirs = sbxdirs(17:end);                      %% Sub-select files you want to continue in pipeline with by indexing 
 %% Write TIFFs - OPTIONAL! CAN RUN .Sbx DIRECTLY IN SUITE2P on YB-2
 baseline=[pos1Idx(3),pos3Idx(2),pos5Idx(8),pos1Idx(7),pos6Idx(4),pos5Idx(1),pos4Idx(5)]
 baseline=baseline+20
@@ -38,7 +38,7 @@ end
     root   = 'Z:\AFdata\2p2019\W10'
     ext='_eye.mat'
     eyedirs = findFILE(root,ext);
-    eyeDirs = eyedirs(:)
+    eyeDirs = eyedirs(13:end)
     
 for ii=1:length(eyeDirs)
 [temp]=writeVid(eyeDirs{ii}); % change this so that it will find the eye.mat files from the sbx directories

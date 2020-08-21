@@ -2,7 +2,7 @@ function runConcat2(nidaqs,fullRoot, dffTreatment)
 for ii=1:length(nidaqs)
 [path, fName{ii}]=fileparts(nidaqs{ii});  % getting filenames of nidaqs found
 end
-C=strsplit(path,'\')                      % 
+C=strsplit(path,'\');                      % 
 
 %% try to find nidaqs associated with runs registered together by finding TIFFs present in same folder as 'suite2p' folder
 % finding unique TIFF names in the same folder as the suite2p outputs

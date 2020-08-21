@@ -6,7 +6,7 @@
 % If using FM, convert outputs with jupyter notebook 
 %   (Open anaconda prompt, type jupyter notebook, adjust filepath in facemap processing, run - comment out pupil if only doing motSVD)
 %% Get BHV paths to find stimuli/response onsets/offsets
-    root    ='Z:\AFdata\2p2019\Sut3';                    %% as character 
+    root    ='Z:\AFdata\2p2019\W10';                    %% as character 
     ext = 'bhv2';
     bhvdirs = findFILE(root,ext);
     bhvPath = bhvdirs(:);
@@ -17,24 +17,10 @@ end                                                              % config file (
 % configfile=fullfile(which([cname,'.txt']));
 %% find stim times from nidaq output pulses
     ext1 = 'bhv.mat';
-    bhvdirs = findFILE(root,ext);
-    bhvPath=bhvdirs(:);
-ext2='_dsNidaq.mat'
-
-Dir1 = findFILE(root,ext1);
-Dir2 = findFILE(root,ext2);
-
-if  ~isempty(Dir2) %prone to breaking... should make it either
-    fileBase1=extractBefore(Dir1,ext1);
-    fileBase2=extractBefore(Dir2,ext2);
-    needsFxn =contains(fileBase1,fileBase2)
-else 
-    disp('all files needed')
-    needsFxn=Dir1;
-%     return
-end     
+    bhvdirs = findFILE(root,ext1);
+    bhvPath=bhvdirs(12:end);
     
-    
+    bhvPath=bhvdirs
 for ii=1:length(bhvPath);
    Stim=stimTimes(bhvPath{ii});
 end 

@@ -24,10 +24,11 @@ for ii=1:length(fileSplit);
         end 
     end 
 end 
-    
-try  dsnidaq= load([filepath '\' mouse '_' num2str(date) '_' run '_dsNidaq.mat'])      
+nidaqPath=char(findFILE(filepath, [run '_dsNidaq.mat']) )
+try  dsnidaq= load(nidaqPath)     
 catch
     sprintf('dsNidaq.mat not written/in different folder than BHV file!')
+    Stim=[];
     return
 end
 end

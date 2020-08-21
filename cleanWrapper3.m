@@ -8,7 +8,7 @@
     ext = 'Fall.mat';
     stimdir = findFILE(root,ext);
 
-    stimDirs=stimdir(:);
+    stimDirs=stimdir(22:end);
     time_window=30;
     percentile=10;
 for ii=1:length(stimDirs)
