@@ -135,7 +135,7 @@ clear fac dist minDist time n dff dffTemp ii
 %% Rolling dFF
 if length(runNums)>1
 for ii=2:length(runNums)
- if ~isequal(length(dffTreatment),length(runNums)) %Unless otherwise specified, assume all treated same way
+ if ~isequal(length(dffTreatment),length(runNums)) %Unless otherwise specified, assume all treated same way: percentile
         dffTreatment(ii)=dffTreatment(ii-1)
  end 
 end
