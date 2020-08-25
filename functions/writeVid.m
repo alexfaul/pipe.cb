@@ -61,6 +61,6 @@ try writeVideo(v,data)
     close (v)
     return
 end;
-close(v);
+close(v);x
 success=1;
 end

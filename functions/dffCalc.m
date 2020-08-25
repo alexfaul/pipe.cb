@@ -1,16 +1,17 @@
 function dffCalc(root,percentile,time_window,runNums,dffTreatment)
 if nargin<3, time_window=60; end
-if nargin<4, runNums=[]; end                    % optional, will default to assuming 1:1 nidaq to registered suite2p data
+if nargin<4, runNums=[]; end                    % optional, will default to assuming 1:1 nidaq to registered suite2p data unless frame # mismatch
 if nargin<5, dffTreatment=1;end
-% runNums=(1:2) 
+%% prep for matching to nidaq files
+runNums=arrayfun(@(x) sprintf('%03d', mod(x,100)), runNums, 'UniformOutput', false);  
 %% load in dff data
 suite2pData = load(char(root)); % make it so the path is by the clicked cells
 %% construct + load nidaq path
 [fullRoot,filename,~] = fileparts(root);
 idcs   = strfind(fullRoot,filesep);
-newdir = fullRoot(1:idcs(end-2)-1);                                            % expects Fall.mat to be 3 folders up. This WILL break w diff file arrangement
+newdir = fullRoot(1:idcs(end-2)-1);                                            % expects Fall.mat to be 3 folders up. This WILL break w diff file arrangement (ex: update of Suite2p that changes file locations)
     
-    % should figure out how to make more robust w/out strict naming scheme (or auto generate names)
+    % should figure out how to make more robust w/out strict folder scheme from Suite2p (or auto generate names)
 ext     = '_dsNidaq.mat';
 nidaqDirs = findFILE(newdir,ext);
 
@@ -31,24 +32,16 @@ if length(suite2pData.F)~=nFrames                                               
     if isempty(runNums)                                                             % and user hasn't inputted custom runs to concat together... then,
     runConcat2(nidaqDirs,root,dffTreatment); %should be full path with Fall.mat extension
     runDirs=sort(runsConcatenate);                                          % dialog box to enter runs to cat together if not specified when called
-%     else
-%     runNums=arrayfun(@(x) sprintf('%03d', mod(x,100)), runNums, 'UniformOutput', false);  
+    elseif ~isempty(runNums)  
+    runDirs=nidaqDirs(find(contains(nidaqDirs,runNums)));
     end
    
-  % Find full path of ALL dsNidaq files in the directory                                               
-%   ext='_dsNidaq.mat';
-%   rundirs=findFILE(newdir,ext);   
-%   runDirs=rundirs(find(contains(rundirs,runNums)));   % isolate nidaq files matching the runs manually specified
-%     
-%   if length(runNums)~=length(runDirs)
-%         sprintf('Cannot find nidaq files for all runs associated with Fall.mat file')
-%         return
-%   end
-%   
    for ii=1:length(runDirs)
         [~,fname,~]=fileparts(runDirs{ii});                                     % runDirs has 
         dsNidaq.(fname)=load(runDirs{ii});                                      % load each nidaqfile that matches user-input runs in a loop
         nFrames(ii)=length(dsNidaq.(fname).frames2p);                           % get number of frames for each respective run so we can do neuropil on run-by run basis                                                                    % can be anything, just arbitrarily chose EEG
+        temp=regexp(fname,'\d{3,3}','Match');
+        runNums{ii}=char(temp(end));
    end
 
    fields = fieldnames(dsnidaq);            %# Get the field names from the 1st loaded nidaq file
@@ -140,7 +133,7 @@ end
 
 clear fac dist minDist time n dff dffTemp ii
 %% Rolling dFF
-for ii=1:length(dffTreatment)
+for ii=1:length(runNums)
 if dffTreatment(ii)==2
 cellsort_batched_f=dFFTemp(:,startIdx(ii):endIdx(ii));
 fr_number = size(cellsort_batched_f,2);
@@ -164,7 +157,7 @@ end
 
 suite2pData.dFF(:,startIdx(ii):endIdx(ii)) = (cellsort_batched_f-f0_vector)./ f0_vector;
 %percentile
-else dffTreatment(ii)==1;
+elseif dffTreatment(ii)==1;
     df=dFFTemp(:,startIdx(ii):endIdx(ii));
   f0 = prctile(df,percentile,2);
   suite2pData.dFF(:,startIdx(ii):endIdx(ii)) = (df-f0)./f0;

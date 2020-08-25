@@ -18,7 +18,7 @@ end                                                              % config file (
 %% find stim times from nidaq output pulses
     ext1 = 'bhv.mat';
     bhvdirs = findFILE(root,ext1);
-    bhvPath=bhvdirs(12:end);
+    bhvPath=bhvdirs(8:10);
     
     bhvPath=bhvdirs
 for ii=1:length(bhvPath);
@@ -27,11 +27,11 @@ end
 %% plots of behavior (pupil, running, etc) during trials w/ stim
     ext = '_stim';
     stimdirs = findFILE(root,ext);
-    stimDirs=stimdirs(1);
+    stimDirs=stimdirs(9);
     time_window=90;
 
 for ii=1:length(stimDirs) %should this go back to looking for dsnidaq? If there is no stim... skip behavior plots?
-   behaviorPlots(stimDirs{ii},time_window,'FC Day 3 - Expression')           % last is custom label (useful for labeling behavioral day ex: FC) 
+   behaviorPlots(stimDirs{ii},time_window,'FC App Day 3')           % last is custom label (useful for labeling behavioral day ex: FC) 
 end %still needs some cleaning/optimization (such as adding graphing fxn?)
 
 

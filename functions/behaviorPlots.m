@@ -84,8 +84,10 @@ end
 behIdx=fieldnames(Beh); % fieldnames to loop through graph generation
 clearvars -except Beh behIdx dsNidaq filename folder fullRoot motsvd Stim stimTime timeWin altTitle
 %% finding visstim length
-if length(Stim.visstimOnsets)~=length(Stim.visstimOffsets);                 % Only taking through the vis stims that have onset+offset to avoid partial trials 
+if length(Stim.visstimOnsets)>length(Stim.visstimOffsets);                 % Only taking through the vis stims that have onset+offset to avoid partial trials 
     Stim.visstimOnsets=Stim.visstimOnsets(1:length(Stim.visstimOffsets));
+elseif length(Stim.visstimOnsets)<length(Stim.visstimOffsets);             % Some files may have "offset" when first starting visstim when screen is blank 
+        Stim.visstimOffsets=Stim.visstimOffsets(2:length(Stim.visstimOffsets)); %So ignore 1st "offset"
 end 
 
 for kk=1:length(Stim.visstimOnsets);                                        % finding length of all trials 
@@ -191,18 +193,20 @@ colorbar
 end
 figName=[ft,'',' SHOCK','_behHeatmap','.jpeg']
 saveas(gcf,(figName))
+%%
+timeVec=0:(timeWin+timeWin); %make time vector
 
 %%%% ShErrBar for shock
-for mm=1:length(behIdx) %loop through all behaviors to be plotted
 figure
-subplot(length(oriIdx),1,mm)
+for mm=1:length(behIdx) %loop through all behaviors to be plotted
+subplot(length(behIdx),1,mm)
 shadedErrorBar(timeVec,...
     responseShock.(behIdx{mm}),{@mean,@(x) std(x)/sqrt(size(x,1))});
-temp=behIdx{kk};
+temp=behIdx{mm};
 xlabel(temp,'Interpreter', 'none')
 hold on
 plot([timeWin timeWin],ylim); %
-plot([timeWin+stimLength timeWin+stimLength],ylim);
+plot([timeWin+2 timeWin+2],ylim);
 hold off
 sgtitle([upper([behIdx{mm}]),' ',figTitle, ' shErrBar(sem) - Shock Behavior Response']);
 figName=[ft,'','_shErrBarShock','.jpeg'];
