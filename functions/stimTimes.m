@@ -58,32 +58,19 @@ if length(find(structfun(@isempty, Stim)))>=6
     return
 end 
 %% Adjusting conditions/trials actually recorded by nidaq pulses
-Stim.condition=[];
-Stim.trial=[];
 Stim.condition=BHV.ConditionNumber(1:num_vstim);              
 Stim.trial=BHV.TrialNumber(1:num_vstim);                      
 %% finding the orientation order
-for ii=1:length(BHV.TaskObject)                                         % split by underscores to isolate the #'s indicating degree orientation
-ori{ii,:}=strsplit(BHV.TaskObject{ii,1},'_');
-end
+BHV.TaskObject=table2cell(BHV.TaskObject);
+A = regexp(BHV.TaskObject,'(?<=_).+?(?=deg)','match')
+B=cellfun(@(x) x{1},A(cellfun('length',A)>0),'uniformoutput',0)
 
-for ii=1:length(ori)
-    temp=ori{ii};
-    if length(temp)==2;                                                 % blanks only have 1 underscore. this is prone to breaking.... may want to address
-        oris{ii}='999';
-    else 
-        oris{ii}=temp{2};                                               % again, assumes same naming structure, falls apart w diff naming structure... regexp before???
-    end
-end
-
-test=(regexp(oris,'\d*','Match'));
-characterOri=cellfun(@str2double,test,'UniformOutput',0); % change this
-%orientations=unique(Stim.condition);
+characterOri=cellfun(@str2double,B,'UniformOutput',0); % change this
+Stim.orientationsUsed=characterOri;
 
 for ii=1:length(Stim.condition)
 Stim.oriTrace(ii) = characterOri{Stim.condition(ii)};
 end
-Stim.orientationsUsed=unique((Stim.oriTrace));
 % Stim.stimTable=stimTable;
 %% Saving struct
 Filename=[filepath,'\',dsnidaq.mouse,'_',num2str(dsnidaq.date),'_', num2str(dsnidaq.run),'_','stim']
