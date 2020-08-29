@@ -18,9 +18,9 @@ end                                                              % config file (
 %% find stim times from nidaq output pulses
     ext1 = 'bhv.mat';
     bhvdirs = findFILE(root,ext1);
-    bhvPath=bhvdirs(7:9);
+    bhvPath=bhvdirs(:);
     
-    bhvPath=bhvdirs
+    bhvPath=bhvdirs;
 for ii=1:length(bhvPath);
    Stim=stimTimes(bhvPath{ii});
 end 

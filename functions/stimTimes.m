@@ -61,7 +61,9 @@ end
 Stim.condition=BHV.ConditionNumber(1:num_vstim);              
 Stim.trial=BHV.TrialNumber(1:num_vstim);                      
 %% finding the orientation order
-BHV.TaskObject=table2cell(BHV.TaskObject);
+if istable(BHV.TaskObject)==1
+BHV.TaskObject=table2cell(BHV.TaskObject,'uniformoutput',0);
+end 
 A = regexp(BHV.TaskObject,'(?<=_).+?(?=deg)','match')
 B=cellfun(@(x) x{1},A(cellfun('length',A)>0),'uniformoutput',0)
 
