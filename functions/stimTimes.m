@@ -2,7 +2,8 @@ function Stim=stimTimes(bhvPath, dsNidaqPath)
 %% Parse input path
 [filepath,filename,~]=fileparts(char(bhvPath));
 BHV=load(bhvPath);
-if nargin==2, dsnidaq=load(dsNidaqPath); end 
+if nargin==2, dsnidaq=load(dsNidaqPath); end  %if nargin ==2, must give
+% dsnidaq as structure
 %% Load the converted BHV file based on extension and same run #
 if nargin<2
 
@@ -33,20 +34,22 @@ catch
 end
 end
 %% Find onsets and offsets
-Stim.mouse=dsnidaq.mouse;
-Stim.date=dsnidaq.date;
+% dsnidaq   = dsNidaqPath;
+Stim.mouse= dsnidaq.mouse;
+Stim.date = dsnidaq.date;
 
-num_vstim=min(sum(diff(dsnidaq.visstim)>=1),sum(diff(dsnidaq.visstim)<=-1)) ;
-Stim.numStim=num_vstim;
-Stim.trialonsets=find(diff(dsnidaq.visstim)>=1)+1';   
-Stim.trialoffsets=find(diff(dsnidaq.visstim)<=-1)+1';  %All of these are +1 bc of fencepost of diff
+num_vstim    = min(sum(diff(dsnidaq.visstim)>=1),sum(diff(dsnidaq.visstim)<=-1)) ;
+Stim.numStim = num_vstim;
+Stim.trialonsets = find(diff(dsnidaq.visstim)>=1)+1';   
+Stim.trialoffsets= find(diff(dsnidaq.visstim)<=-1)+1';  %All of these are +1 bc of fencepost of diff
 
-Stim.visstimOnsets=Stim.trialonsets;
-Stim.visstimOffsets=Stim.trialoffsets;
-Stim.shockOnsets=find(diff(dsnidaq.shock>0.5))+1;   
-Stim.shockOffsets=find(diff(dsnidaq.shock<-0.5))+1;  
-Stim.lickOnsets=find(diff(dsnidaq.licking>0.5))+1;   
-Stim.ensureOnsets=find(diff(dsnidaq.ensure>0.5))+1; 
+Stim.visstimOnsets  = Stim.trialonsets;
+Stim.visstimOffsets = Stim.trialoffsets;
+Stim.shockOnsets    = find(diff(dsnidaq.shock>0.5))+1;   
+Stim.shockOffsets   = find(diff(dsnidaq.shock<-0.5))+1;  
+Stim.lickOnsets     = find(diff(dsnidaq.licking>0.5))+1;   
+Stim.ensureOnsets   = find(diff(dsnidaq.ensure>0.5))+1; 
+Stim.spontaneous    = 0;
 %% testing whether the nidaq supports the BHV file interpretation/is there stim?
 
 if length(find(structfun(@isempty, Stim)))>=6

@@ -40,6 +40,9 @@ if length(suite2pData.F)~=nFrames                                               
         [~,fname,~]=fileparts(runDirs{ii});                                     % runDirs has 
         dsNidaq.(fname)=load(runDirs{ii});                                      % load each nidaqfile that matches user-input runs in a loop
         nFrames(ii)=length(dsNidaq.(fname).frames2p);                           % get number of frames for each respective run so we can do neuropil on run-by run basis                                                                    % can be anything, just arbitrarily chose EEG
+%         A = regexp(fname,'(?<=_).+?(?=_dsNidaq)','match')
+%         temp=cellfun(@(x) x{1},A(cellfun('length',A)>0),'uniformoutput',0)
+
         temp=regexp(fname,'\d{3,3}','Match');
         runNums{ii}=char(temp(end));
    end
@@ -176,7 +179,20 @@ suite2pData.cellIdx=cellidx;
 %% calculate AUC
 suite2pData.AUC=trapz(suite2pData.dFF,2); % not normalized by length SO IF COMPARING BETWEEN DIFF DAYS, MAKE SURE TO NORMALIZE BY LENGTH!
 suite2pData.nidaqAligned=dsnidaq;
+suite2pData.nidaqAligned.startIdx=suite2pData.startIdx;
+suite2pData.nidaqAligned.endIdx=suite2pData.endIdx;
+
 %as trial only basis dffTreatment(ii)==3; 
+%% run stimTimes to append to nidaq data
+suite2pData.Stim=alignStim(suite2pData.nidaqAligned,runNums, newdir);
+
+%% Separate by trials and find bias
+idcs   = strfind(newdir,filesep);
+savePath = newdir(1:idcs(end)-1); 
+[suite2pData.dffTrials,suite2pData.baselineTrials, suite2pData.statsT,suite2pData.statsW]=...
+    separateByTrialsDff(suite2pData,savePath);
+
+suite2pData.bias=biasDet(suite2pData.dffTrials,suite2pData.baselineTrials,savePath,suite2pData.statsW) 
 %% Save struct
 Filename=[newdir,'\',dsnidaq.mouse,'_',num2str(dsnidaq.date),'_',dsnidaq.run,'_','Suite2p_dff.mat'];
 save(Filename, 'suite2pData');

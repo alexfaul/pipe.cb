@@ -1,5 +1,5 @@
-function bias=biasDet(dffTrials,baselineTrials,stats, strLabel) 
-if nargin<4
+function bias=biasDet(dffTrials,baselineTrials,savePath,stats, strLabel) 
+if nargin<5
     strLabel=['']
 end 
 %can use any stats determination for visually driven here
@@ -47,7 +47,7 @@ bias.visDrivenIDX=visDrivenIDX;
 %% bias for plotting
 
 for ii=1:length(trialTypeIDX)
-   temp=find(bias.(trialTypeIDX{ii})>=0.5);
+   temp=find(bias.(trialTypeIDX{ii})>=0.4);
     biasPerc(ii)=(length(temp))/(length(bias.(trialTypeIDX{ii})))*100;
 end 
 
@@ -60,6 +60,9 @@ ylim([0 25])
 ylabel('Percentage of cells responsive to cue')
 xlabel('Orientations')
 title([dffTrials.mouse,' ',dffTrials.runDate,' ',dffTrials.run, ' Bias Percentage for each Ori ',strLabel]);
+
+ft=[savePath,'\',dffTrials.mouse,' ',dffTrials.runDate,' ',dffTrials.run,'_biasPercOri','.jpeg'];
+saveas(gcf,(ft))
 % text(1:length(biasPerc),biasPerc,num2str(biasPerc'),'vert','top','horiz','center'); 
 
 end 

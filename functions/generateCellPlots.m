@@ -6,7 +6,7 @@ load(root)
 %% load in all Stim info? Should I do all runs separate, 
 
 extList='stim.mat'
-StimDirs=findFilePathAF(path,extList);
+StimDirs=findFILE(path,extList);
 %% 
 folder=[path,'\','cellPlots'];
 if ~exist(folder, 'dir');

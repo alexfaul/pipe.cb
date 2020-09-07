@@ -9,12 +9,6 @@
     sbxdirs = findFILE(root,ext);                  %% Will return cell array of all files under root containing extList
     sbxDirs = sbxdirs(17:end);                      %% Sub-select files you want to continue in pipeline with by indexing 
 %% Write TIFFs - OPTIONAL! CAN RUN .Sbx DIRECTLY IN SUITE2P on YB-2
-baseline=[pos1Idx(3),pos3Idx(2),pos5Idx(8),pos1Idx(7),pos6Idx(4),pos5Idx(1),pos4Idx(5)]
-baseline=baseline+20
-
-n=min(Stim.trialoffsets-Stim.trialonsets)
-
-stimTimes=baseline;
 stimTimes=[]
 n=1000;
 %n=trialLength-1

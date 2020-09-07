@@ -6,24 +6,24 @@
 % If using FM, convert outputs with jupyter notebook 
 %   (Open anaconda prompt, type jupyter notebook, adjust filepath in facemap processing, run - comment out pupil if only doing motSVD)
 %% Get BHV paths to find stimuli/response onsets/offsets
-    root    ='Z:\AFdata\2p2019\W03';                    %% as character 
+    root    ='Z:\AFdata\2p2019\Sut3';                    %% as character 
     ext = 'bhv2';
     bhvdirs = findFILE(root,ext);
-    bhvPath = bhvdirs(6:8);
+    bhvPath = bhvdirs(57:58);
 
 for ii=1:length(bhvPath);   
    [~]= bhv2Convert(bhvPath{ii});                               %% MAKE SURE THERE IS A RUN # in THE .bhv2 FILE NAME (A 001 or 002 etc) IN THERE
 end                                                              % config file (.txt with MonkeyLogic Conditions) should be in the 2p data folder
 % configfile=fullfile(which([cname,'.txt']));
 %% find stim times from nidaq output pulses
-    ext1 = 'bhv.mat';
-    bhvdirs = findFILE(root,ext1);
-    bhvPath=bhvdirs(:);
-    
-    bhvPath=bhvdirs;
-for ii=1:length(bhvPath);
-   Stim=stimTimes(bhvPath{ii});
-end 
+%     ext1 = 'bhv.mat';
+%     bhvdirs = findFILE(root,ext1);
+%     bhvPath=bhvdirs(:);
+%     
+%     bhvPath=bhvdirs;
+% for ii=1:length(bhvPath);
+%    Stim=stimTimes(bhvPath{ii});
+% end 
 %% plots of behavior (pupil, running, etc) during trials w/ stim
     ext = '_stim';
     stimdirs = findFILE(root,ext);
