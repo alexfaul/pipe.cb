@@ -22,15 +22,9 @@ The only user steps to run pipe.cb are
 ### To Access Data:
 [Turbo Instructions](/docs/TurboAccess.md) 
 
-### To Access Remote desktop (yottabyte):
-Must have an account with ARC
 
-[Yottabyte instructions](/docs/yottabyteAccess.md)
-
-
-#### In the works - Shell to run through constitutively 
 
  Alexa Faulkner 2020
 
 ### HUGE THANK YOU TO:
-Carsen Stringer, Marius Pachitariu, Arthur Sugden, Rohan Ramesh for essential guidance, and providing essential code and tools!
+Carsen Stringer, Marius Pachitariu, Arthur Sugden for essential guidance, code and tools!
