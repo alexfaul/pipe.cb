@@ -1,4 +1,4 @@
-function [ FList ] = findFILE(DataFolder,ext,OS)
+function [ FList ] = findFILE(DataFolder,ext,os)
 % DataFolder, extList, OS all expect characters inputs ('example')
 
 % This function reads all file names contained in Datafolder and it's subfolders
@@ -13,12 +13,17 @@ function [ FList ] = findFILE(DataFolder,ext,OS)
 %extList={'sbx','avi'};
 %OS='PC'
 %% Set parsing parameters
-persistent extList
+persistent extList 
+persistent OS 
 extList=ext;
 
 if nargin < 3 
-    OS = 'PC'; 
+     os = 'PC'; 
 end         %assumes windows file name rules
+OS=os;
+
+
+
 
 if(strcmpi(OS,'PC') || strcmpi(OS,'Win')) || strcmpi (OS,'Mac')
     NameSeparator='\';
@@ -39,11 +44,10 @@ for i=1:numel(DirContents)
                 FList=cat(1,FList,{[DataFolder,NameSeparator,DirContents(i).name]});
             end
         else
-            getlist=findFILE([DataFolder,NameSeparator,DirContents(i).name],extList);
+            getlist=findFILE([DataFolder,NameSeparator,DirContents(i).name],extList,os);
             FList=cat(1,FList,getlist);
         end
     end
 end
 
 end
-

@@ -12,7 +12,11 @@ function success = writeTiff(array, tifPath, typestr, ijroot)
 
     % Correct the image type
     if nargin < 3, typestr = class(array); end
-    if nargin < 4, ijroot= 'E:\2Photon\pipe-master\minimal_ImageJ'; end
+    if nargin < 4, ijroot= '/sw/med/centos7/fiji'; end
+        %'/nfs/turbo/umms-crburge/Code/AF/newPipeline/pipe.cb/greatlakes/Fiji/Fiji.app'; end
+        %%Lex's ComputerE:\2Photon\pipe-master\minimal_ImageJ'; 
+        %%Alvins Computer: 'C:\Fiji.app' ; end
+        
 
     if ~strcmp(class(array), typestr), array = cast(array, typestr); end
 

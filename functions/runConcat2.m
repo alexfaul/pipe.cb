@@ -11,6 +11,10 @@ idcs   = strfind(fullRoot,filesep);
 newdir = fullRoot(1:idcs(end-2)-1); %go up 2 folder levels from the Fall.mat file
 %% Find Run # of Tiffs to match to nidaq
 %By taking unique 3 digit numbers (TIFF naming scheme is Sut3_191127_001_-1 etc)
+%%get run numbers present in TIFFS
+%%%%%%%%%%%%%%%%%%%%% IMPORTANT
+%%%%%%%%%%%%%%%%%%%%% If you don't write TIFFS and use sbx file directly,
+%%%%%%%%%%%%%%%%%%%%% runs will have to be separated by folder
  ext = '.tif';
 tifDir = findFILE(newdir,ext);
 runsTemp = regexp(tifDir,'_\d\d\d_','match');
@@ -18,7 +22,14 @@ A=runsTemp(find(~cellfun(@isempty,runsTemp)));
 
 B = (cellfun(@(x) [x{:}],A,'un',0));
 nidaqRuns=unique(extractBetween(B,'_','_'));
-runDirs=nidaqs(find(contains(nidaqs,nidaqRuns)));   % isolate nidaq files matching the runs detected from tiff names
+
+%%get run numbers of nidaqs
+nidaqMatch = regexp(nidaqs,'_\d\d\d_','match');
+nidaqMatch = (cellfun(@(x) [x{:}],nidaqMatch,'un',0));
+nidaqMatch=unique(extractBetween(nidaqMatch,'_','_'));
+
+
+runDirs=nidaqs(find(contains(nidaqMatch,nidaqRuns)));   % isolate nidaq files matching the runs detected from tiff names
 runsConcatenate=[];                                            % set empty vector to still return if can't find correct nidaq files
 if ~isempty(runDirs)
     runsConcatenate=runDirs;

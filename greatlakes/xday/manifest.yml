@@ -1,0 +1,5 @@
+---
+name: 'xdayTest '
+host: greatlakes
+notes: "<p>Change these notes by editing the manifest.yml in this template&#39;s directory</p>\r\n"
+script: Test.sh

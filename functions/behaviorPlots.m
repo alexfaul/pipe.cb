@@ -234,5 +234,7 @@ figName=[ft,'',(behIdx{mm}),'_shErrBar','.jpeg'];
 saveas(gcf,(figName))
 end
 
+Filename=[ft,'_Behavior.mat'];
+save(Filename, 'Beh');
 
 end 

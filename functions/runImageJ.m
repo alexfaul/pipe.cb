@@ -4,9 +4,13 @@ function runImageJ(ijroot)
     % GNU Octave compatibility added by Eric Barnhill, Jul 2016
     % Edited by Arthur Sugden to force ImageJ to be headless
     % Modified by Lex Faulkner for pipe.cb
+    %%java -Djava.awt.headless=true; %% for greatlakes 
     if nargin>1
         disp('Please input path of imageJ, assuming set for YB otherwise')
-        ijroot = 'E:\2Photon\pipe-master\minimal_ImageJ';
+        ijroot = '/sw/med/centos7/fiji';
+        %'/nfs/turbo/umms-crburge/Code/AF/newPipeline/pipe.cb/greatlakes/Fiji/Fiji.app';
+        %Lexi's -'E:\2Photon\pipe-master\minimal_ImageJ';
+        %Alvin's C:\Fiji.app';
     end 
     
     persistent imagej_loaded
@@ -34,7 +38,6 @@ function runImageJ(ijroot)
         % javaMethod('setProperty', 'java.lang.System', 'plugins.dir', fiji_directory);
 
         %% Don't open the ImageJ window
-        
         % initialize ImageJ with the NO_SHOW flag (== 2)
         ij.ImageJ([], 2);
         imagej_loaded = 1;    

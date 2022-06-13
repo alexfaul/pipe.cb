@@ -1,6 +1,6 @@
 function tiffLoop(path, n, pmt, customStart,ijroot,varargin)
 %% put path to YOUR imagej here
-if nargin<5, ijroot= 'E:\2Photon\pipe-master\minimal_ImageJ'; end 
+if nargin<5, ijroot= '/sw/med/centos7/fiji'; end 
 %should add mkdir optional. Will always make a folder named
 %'unregisteredTIFFs' where .sbx file is found and put all Tiffs in that folder
 %% I/O
@@ -36,7 +36,7 @@ if nargin<5, ijroot= 'E:\2Photon\pipe-master\minimal_ImageJ'; end
     p = p.Results;
     
     if nargin < 2, n = 1000; end
-    if nargin < 3, pmt = 1; end 
+    if nargin < 3, pmt = 0; end 
     if nargin < 4, customStart = []; end 
 
     info = readSbxInfo(path);

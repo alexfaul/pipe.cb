@@ -1,13 +1,9 @@
-function [ bhv_struct ] = bhv2Convert(dataFile,configFile)
+function [ bhv_struct ] = bhv2Convert(dataFile,configRoot,configFile)
 %% I/O
 % datafile:      path to .bhv2 file (character, with extension)
 % config file:   path of config Monkeylogic file (accessible to pipe, not original path from ML). Optional bc it will parse the info within .bhv2, 
 %                but if there are duplicate files w/ same names + diff info, could pull in
 %                wrong information
-
-% bhv_struct:    structure w info about conditions and stim order/times
-%                Saves as .mat file so can loop through and write for
-%                multiple files
 
 % MAKE SURE YOUR .BHV2 FILE HAS RUN # (e.g. 001) listed so it can be
 % matched to correct nidaq file.
@@ -36,14 +32,16 @@ bhv_struct=cell2struct(cell(numel(bhvFields),1),bhvFields);
 %% getting name of config file + finding path (Checking input NAME matches structure. Allows for 2 paths)
 
 [~, cName, ~] = fileparts(MLConfig.MLPath.ConditionsFile);                  %Name of conditions file from filepath of conditions file on ML computer
-if nargin<2,                                                                % Must have location of ML scripts on Matlab path (could use findFILE here?)
-    configFile=fullfile(which([cName,'.txt']));                             % Find configfile local path, based on config filename in bhv2 file
+if nargin<3,                                                                % Must have location of ML scripts on Matlab path (could use findFILE here?)
+    configFile=findFILE(configRoot,[cName,'.txt']);
+    configFile=char(configFile);                                                       % Find configfile local path, based on config filename in bhv2 file
 end                                                                         % this is going to look in directory close to data first
 
-[~, cFile, ~] = fileparts(configFile);                                      % getting name of config file (if nargin<2, this will be the same, but important check
                                                                             % checking that any manually entered config file matches name in the .bhv2 file
-if  strcmp(cName,cFile)==0                                                  % as seen in this if statement
+if  isempty(configFile)==1                                                  % as seen in this if statement
         sprintf('Please check config file! Filename not found/doesnt match conditions file listed in original BHV: %s ', cName) %6f
+        %%add something here to find based on name of file not the one
+        %%listed in MLConfig??
         return
 end 
 %% Save file info to new struct
@@ -140,10 +138,40 @@ bhv_struct.FullConditions=parsedConditions(2:end,:)
 
 taskObject=(bhv_struct.FullConditions(:,5:end));
 bhv_struct.TaskObject=taskObject;
+
+%% Assign unique colors to be used for consistent ori 
+
+A = regexp(taskObject,'(?<=_).+?(?=deg)','match');
+B=cellfun(@(x) x{1},A(cellfun('length',A)>0),'uniformoutput',0);
+
+characterOri=cellfun(@str2double,B,'UniformOutput',0); % change this
+bhv_struct.orientationsOrderedbyCond=characterOri;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+bhv_struct.colors=distinguishable_colors(length(characterOri)) 
+%%make vector of maximally distinct for all ori
+% bhv_struct.colors=zeros(length(colors),3)           % 3 columns bc RBG is a TRIPLET, make matrix of all zeroes to protect against edge effects (if Csp and CSm arent 1st/3rd, would miss correct final size by 1)
+% for ii=1:length(characterOri)                       %%manually set any that have CSp (CS plus) or CSm (CS minus)in timing files to green + red respectively
+% if ii==find(contains(bhv_struct.TimingFileByCond,'CSp'))
+%     bhv_struct.colors(ii,:)=[0,1,0] %green
+% elseif ii==find(contains(bhv_struct.TimingFileByCond,'CSm'))
+%      bhv_struct.colors(ii,:)=[1,0,0] %red
+% elseif ii==find(contains(bhv_struct.TimingFileByCond,'Csnrand'))
+%      bhv_struct.colors(ii,:)=[0,0,1] %blue
+% 
+% end
+% end
+% 
+% colorDiff = setdiff(colors,bhv_struct.colors,'rows')  %find which colors from full set of max distinct colors was already used (if CSp or CSm present)
+% unassigned=find(all(bhv_struct.colors == 0,2));       %find where the rows havent been assigned a color in bhv struct
+% 
+% for ii=1:size(colorDiff,1) %by number of rows found in unrepresented color triplet
+% bhv_struct.colors(unassigned(ii),:)=colorDiff(ii,:);  %sub the rows still empty for color assignment w remaining colors (red + green spoken for if CSp/CSm used)
+% end
 %% save as struct
 filepath=fileparts(dataFile);
 FileName=[filepath,'\',bhv_struct.DataFileName,'_','bhv'];
 save(FileName, '-struct', 'bhv_struct');
 success=1;
+fclose('all');
 end
 

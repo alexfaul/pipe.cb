@@ -6,15 +6,16 @@
 % If using FM, convert outputs with jupyter notebook 
 %   (Open anaconda prompt, type jupyter notebook, adjust filepath in facemap processing, run - comment out pupil if only doing motSVD)
 %% Get BHV paths to find stimuli/response onsets/offsets
-    root    ='Z:\AFdata\2p2019\Sut3';                    %% as character 
-    ext = 'bhv2';
+    root    ='Z:\AFdata\2p2019\Experiments\W10';                    %% as character 
+    ext = '.bhv2';
     bhvdirs = findFILE(root,ext);
-    bhvPath = bhvdirs(57:58);
+    bhvPath = bhvdirs(:);
+    bhvPath = cellDirs(5:end);
 
 for ii=1:length(bhvPath);   
-   [~]= bhv2Convert(bhvPath{ii});                               %% MAKE SURE THERE IS A RUN # in THE .bhv2 FILE NAME (A 001 or 002 etc) IN THERE
-end                                                              % config file (.txt with MonkeyLogic Conditions) should be in the 2p data folder
-% configfile=fullfile(which([cname,'.txt']));
+   [~]= bhv2Convert(bhvPath{ii},'Z:\AFdata\2p2019');      %% MAKE SURE THERE IS A RUN # in THE .bhv2 FILE NAME (A 001 or 002 etc) IN THERE
+end                                                                                                     % config file (.txt with MonkeyLogic Conditions) should be in the 2p data folder
+% configfile=fullfile(which([cname,'.txt']));'Z:\AFdata\2p2019\FC_baselinerand_200211.txt'
 %% find stim times from nidaq output pulses
 %     ext1 = 'bhv.mat';
 %     bhvdirs = findFILE(root,ext1);
@@ -22,7 +23,7 @@ end                                                              % config file (
 %     
 %     bhvPath=bhvdirs;
 % for ii=1:length(bhvPath);
-%    Stim=stimTimes(bhvPath{ii});
+    Stim=stimTimes(bhvPath{ii});
 % end 
 %% plots of behavior (pupil, running, etc) during trials w/ stim
     ext = '_stim';

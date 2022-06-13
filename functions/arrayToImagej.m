@@ -3,10 +3,16 @@ function imp = arrayToImagej(array, typestr, ijroot,name)
     %   imp = ijarray2plus(array, typestr)
     %   array size [nRows,nCols,nFrames,nPlanes]
     % Edited Arthur Sugden 180731
-    % Edited A faulkner 20/05/20
+    % Edited A faulkner 20/05/20, 1/27/22
     if nargin < 2 || isempty(typestr), typestr = class(array); end  
     if nargin < 3, disp('please pass/correct imageJ path in tiffLoop');
-    ijroot= 'E:\2Photon\pipe-master\minimal_ImageJ'; end %this is default for YB, will have to change for other setups
+    ijroot = '/sw/med/centos7/fiji'; end
+    %'/nfs/turbo/umms-crburge/Code/AF/newPipeline/pipe.cb/greatlakes/Fiji/Fiji.app'; end %greatlakes root 
+    %this is default for YB, will have to change for other setups
+    
+
+
+%%%
     if nargin < 4, name = 'stack'; end %oh we can improve this!! Parse file name to actually name tiffs
      
     arraytype = class(array);
